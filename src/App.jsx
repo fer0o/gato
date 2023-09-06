@@ -5,11 +5,11 @@ import { useState } from "react"
     O: 'o'
   }
 
-  const Square = ({children,isSelected, updateBoard, index})=>{
+  const Square = ({children, isSelected, updateBoard, index})=>{
     const className = `square ${isSelected ? 'is-selected': ''}`
 
     const handleClick = ()=>{
-      updateBoard()
+      updateBoard(index)
     }
 
 
@@ -34,15 +34,27 @@ import { useState } from "react"
 
   const [board,setBoard] = useState(Array(9).fill(null))
   const [turn, setTurn] = useState(TURNS.X)
+  //null es que no hay ganador, false que hay empate
+  const [winner, setWinner] = useState(null)
 
-  const updateBoard = ()=>{
+  const updateBoard = (index)=>{
+
+    //spread y rest operator
+
+    // no actualizar esta posición si ya tiene algo
+    if(board[index]) return
+    const newBoard = [...board]
+    newBoard[index]= turn  // x u o
+    setBoard(newBoard)
+
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
+    setTurn(newTurn)
   }
 
 
   return (
     <main className='board'>
-      <h1>Gato 😺!</h1>
+      <h1>Gato 😺</h1>
       <section className="game">
         {
           board.map((_,index)=>{
@@ -52,7 +64,7 @@ import { useState } from "react"
               index={index}
               updateBoard={updateBoard}
               >
-                
+                {board[index]}
               </Square>
             )
           })
