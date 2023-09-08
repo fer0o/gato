@@ -8,8 +8,15 @@ import { WinnerModal } from "./components/WinnerModal.jsx"
 
   function App() {
 
-  const [board,setBoard] = useState(Array(9).fill(null))
-  const [turn, setTurn] = useState(TURNS.X)
+  const [board,setBoard] = useState(()=>{
+    const boardFromStage = window.localStorage.getItem('board')
+    if(boardFromStage) return JSON.parse(boardFromStage)
+    return Array(9).fill(null)
+  })
+  const [turn, setTurn] = useState(()=>{
+    const turnFromStorage = window.localStorage.getItem('turn')
+    return turnFromStorage ?? TURNS.X 
+  })
   //null es que no hay ganador, false que hay empate
   const [winner, setWinner] = useState(null)
 
@@ -19,6 +26,8 @@ import { WinnerModal } from "./components/WinnerModal.jsx"
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
+
+    window
    }
 
 
@@ -35,6 +44,9 @@ import { WinnerModal } from "./components/WinnerModal.jsx"
 
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
+
+    window.localStorage.setItem('board', JSON.stringify(newBoard))
+    window.localStorage.setItem('turn',newTurn)
 
     //revisar si hay ganador
     const newWinner = checkWinner(newBoard)
