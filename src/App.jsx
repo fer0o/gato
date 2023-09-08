@@ -60,6 +60,17 @@ import { useState } from "react"
     return null
   }
 
+  //resetear el juego
+   const resetGame = () => {
+    setBoard(Array(9).fill(null))
+    setTurn(TURNS.X)
+    setWinner(null)
+   }
+
+   const checkEndGame = (newBoard) =>{
+    return newBoard.every((square) => square !== null)
+   }
+
   const updateBoard = (index)=>{
 
     //spread y rest operator
@@ -78,12 +89,16 @@ import { useState } from "react"
     if(newWinner){
       setWinner(newWinner)
     }
+    else if( checkEndGame(newBoard)){
+      setWinner(false)
+    }
   }
 
 
   return (
     <main className='board'>
       <h1>Gato 😺</h1>
+      <button onClick={resetGame}>Reset Game</button>
       <section className="game">
         {
           board.map((_,index)=>{
@@ -121,7 +136,7 @@ import { useState } from "react"
                 }
               </header>
               <footer>
-                <button>Empezar de nuevo</button>
+                <button onClick={resetGame}>Empezar de nuevo</button>
               </footer>
             </div>
           </section>
